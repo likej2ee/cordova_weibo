@@ -79,19 +79,29 @@ NSString *WEIBO_USER_CANCEL_INSTALL = @"user cancel install weibo";
     } else {
         // if([WeiboSDK isWeiboAppInstalled]){
         WBMessageObject *message = [WBMessageObject message];
-        WBWebpageObject *webpage = [WBWebpageObject object];
-        webpage.objectID = [NSString stringWithFormat:@"%f", [[NSDate date] timeIntervalSince1970]];
-        webpage.title = [params objectForKey:@"title"];
-        webpage.description = [NSString stringWithFormat:[params objectForKey:@"description"], [[NSDate date] timeIntervalSince1970]];
+//        WBWebpageObject *webpage = [WBWebpageObject object];
+        WBImageObject *image = [WBImageObject object];
+//
+//        webpage.objectID = [NSString stringWithFormat:@"%f", [[NSDate date] timeIntervalSince1970]];
+//        webpage.title = [params objectForKey:@"title"];
+//        webpage.description = [NSString stringWithFormat:[params objectForKey:@"description"], [[NSDate date] timeIntervalSince1970]];
+//
         if (([params objectForKey:@"imageUrl"] && ![[params objectForKey:@"imageUrl"] isEqualToString:@""])) {
             if ([[params objectForKey:@"imageUrl"] hasPrefix:@"http://"] || [[params objectForKey:@"imageUrl"] hasPrefix:@"https://"]) {
-                webpage.thumbnailData = [NSData dataWithContentsOfURL:
-                        [NSURL URLWithString:[params objectForKey:@"imageUrl"]]];
+//                webpage.thumbnailData = [NSData dataWithContentsOfURL:
+//                        [NSURL URLWithString:[params objectForKey:@"imageUrl"]]];
+
+                image.imageData = [NSData dataWithContentsOfURL:
+                                   [NSURL URLWithString:[params objectForKey:@"imageUrl"]]];
+
             }
 
         }
-        webpage.webpageUrl = [params objectForKey:@"url"];
-        message.mediaObject = webpage;
+
+//        webpage.webpageUrl = [params objectForKey:@"url"];
+//        message.mediaObject = webpage;
+        message.imageObject = image;
+        message.text = [params objectForKey:@"defaultText"];
         NSUserDefaults *saveDefaults = [NSUserDefaults standardUserDefaults];
         NSString *token = [saveDefaults objectForKey:@"access_token"];
         WBSendMessageToWeiboRequest *request = [WBSendMessageToWeiboRequest requestWithMessage:message authInfo:authRequest access_token:token];
